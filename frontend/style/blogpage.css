@@ -1,0 +1,25 @@
+.Comment {
+  background-color: black;
+  color: white;
+  padding: 1em;
+  margin: 1em;
+}
+.PFP {
+  width: 5em;
+  border-radius:50%;
+  border: 0.2em solid green;
+  float: left;
+  margin: 0 1em 1em 0
+}
+.PF {
+  margin: 0;
+}
+.CommentTimestamp {
+  margin-top: 0;
+  color:grey;
+  font-size: 0.7em;
+}
+.ErrorAleart {
+  color: darkred;
+  background-color: pink;
+}

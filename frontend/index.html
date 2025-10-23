@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Blog Homepage</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="Blog Philosophy Code">
+        <meta name="description" content="Code and Philosophy Blog by somone with just a bit too much free time">
+        <meta name="author" content="Kei Murasame">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <base href="https://amekei.com" target="_blank"> -->
+
+        <link rel="icon" href="/res/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="/style/homepage.css">
+        <link rel="stylesheet" href="/style/style.css">
+    </head>
+    <body>
+        <nav id="Topbar">
+            <div id="TopbarNavigation">
+                <a href="/index.html" class="TopbarLink">Homepage</a>
+                <a href="/blog/Page1.html" class="TopbarLink">Page 1</a>
+            </div>
+            <input type="image" src="https://imgs.search.brave.com/y0RdP_M5ctsg5I9kG1v6cVdA8PaJh35mBB1G8ceHn-0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAzLzMyLzU5LzY1/LzM2MF9GXzMzMjU5/NjUzNV9sQWRMaGY2/S3piVzZQV1hCV2VJ/RlRvdlRpaTFkcmti/VC5qcGc" alt="your profile photo" id="AccountPicture" onclick="ShowProfile()">
+        </nav>
+        <div id="LoginPanel" class="hidden">
+            <h1>Log in or sign up</h1>
+
+            <form id="AccountSignInForm" class="sendLogin(event)">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" autocomplete="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+                <button type="submit">Log In</button>
+            </form>
+        </div>
+
+        <h1>Welcome to my Blog!</h1>
+        <p>I go by the alias 村雨 硅 at the moment.
+        I make content about code, philosophy, and travel!
+        I post once a week, and i actually hate you.</p>
+        <h2>Pages</h2>
+        <div id="PageFilterButtons">
+            <button class="FilterButton on" id="PhilosophyTag">Philosophy</button>
+            <button class="FilterButton on" id="CodeTag">Code</button>
+            <button class="FilterButton on" id="TravelTag">Travel</button>
+        </div>
+        <div id="PageContainer">
+            <div class="PageDiv Philosophy" id="page1">
+                <a class="PageLink" href="/blog/page1.html">link</a>
+                <p class="PageDate">Date Posted:</p>
+                <p class="PageDescription">Philosophy page! We love philosophy!</p>
+            </div>
+            <div class="PageDiv Code" id="page2">
+                <a class="PageLink" href="./page2.html">link</a>
+                <p class="PageDate">Date Posted:</p>
+                <p class="PageDescription">Code page! We love Code!</p>
+            </div>
+            <div class="PageDiv Code Philosophy" id="page3">
+                <a class="PageLink" href="./page3.html">link</a>
+                <p class="PageDate">Date Posted:</p>
+                <p class="PageDescription">Code and philosophy page! What an abomination!</p>
+            </div>
+            <div class="PageDiv Philosophy Travel" id="page4">
+                <a class="PageLink" href="./page4.html">link</a>
+                <p class="PageDate">Date Posted:</p>
+                <p class="PageDescription">Philosophy and travel page! Makes sense!</p>
+            </div>
+            <div class="PageDiv Travel Code" id="page5">
+                <a class="PageLink" href="./page5.html">link</a>
+                <p class="PageDate">Date Posted:</p>
+                <p class="PageDescription">Travel code page! Makes sense!</p>
+            </div>
+            <div class="PageDiv Travel" id="page6">
+                <a class="PageLink" href="./page6.html">link</a>
+                <p class="PageDate">Date Posted:</p>
+                <p class="PageDescription">Travel page? Lame!</p>
+            </div>
+            <div class="PageDiv Code Travel Philosophy" id="page7">
+                <a class="PageLink" href="./page7.html">link</a>
+                <p class="PageDate">Date Posted:</p>
+                <p class="PageDescription">Code Travel Philosophy page? Too many things!</p>
+            </div>
+        </div>
+
+        <script src="/scripts/homepage.js"></script>
+    </body>
+</html>

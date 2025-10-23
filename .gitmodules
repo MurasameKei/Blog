@@ -1,0 +1,6 @@
+[submodule "backend/cpp-httplib"]
+	path = backend/cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "frontend/scripts/noble-post-quantum"]
+	path = frontend/scripts/noble-post-quantum
+	url = https://github.com/paulmillr/noble-post-quantum.git

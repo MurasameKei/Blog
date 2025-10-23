@@ -1,0 +1,33 @@
+#Topbar {
+    background-color: green;
+    display: flex;
+    justify-content: space-between;
+}
+#AccountPicture {
+    height: 3.5em;
+    width:  3.5em;
+    border-radius: 50%;
+    border: 0.2em solid black;
+}
+
+#TopbarNavigation {
+    display: flex;
+    flex-grow: 1;
+    align-items: stretch;
+}
+
+.TopbarLink {
+    flex-grow: 1;
+    background-color: black;
+    margin: 0.5em;
+}
+
+#LoginPanel {
+    z-index: 1;
+    position: absolute;
+    background-color: red;
+    right: 0;
+}
+.hidden {
+    display: none;
+}
