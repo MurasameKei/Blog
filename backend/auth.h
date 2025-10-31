@@ -2,8 +2,6 @@
 #define AUTHENTICATION_MANAGEMENT
 
 #include <string>
-namespace httplib{ class Server; }
-int initAuthServer(httplib::Server* svr);
 
 enum privilege {
     Basic,
@@ -13,5 +11,6 @@ enum privilege {
     Admin
 };
 bool canAccess(std::string sid, privilege priv);
+int getuid(std::string sid);
 
 #endif

@@ -3,10 +3,7 @@
 
 #include <string>
 #include <nlohmann/json.hpp>
-namespace httplib{ class Server; }
-
-int initCryptoServer(httplib::Server* server);
-std::string encaps(std::string sendData, std::string SID, bool useEncryption = true);
+std::string encaps(std::string sendData, std::string SID);
 std::pair<nlohmann::json, std::string> decaps(std::string rawData);
 
 #endif

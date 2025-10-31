@@ -3,9 +3,6 @@
 
 #include <functional>
 #include <string>
-namespace httplib{ class Server; }
-int initSessionServer(httplib::Server* svr);
-void updateSessions();
 
 void startSession(std::string sid);
 void attachCrypto(std::string sid);

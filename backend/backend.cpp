@@ -1,45 +1,6 @@
 #include "cpp-httplib/httplib.h"
-#include "auth.h"
-#include "crypto.h"
-#include "session.h"
-#include <nlohmann/json.hpp>
-#include <iostream>
-#include <string>
-
 #include <thread>
-struct CommentData {
-    int uid;
-    std::string timestamp;
-    std::string payload;
-};
-
-std::vector<CommentData> comments = {};
-
-std::string getComments() {
-    nlohmann::json commentJson;
-    for(int i = 0; i < comments.size(); i++) {
-        commentJson[i]["payload"] = comments[i].payload;
-        commentJson[i]["timestamp"] = comments[i].timestamp;
-        commentJson[i]["username"] = std::to_string(comments[i].uid);
-        commentJson[i]["pfpURL"] = "https://imgs.search.brave.com/y0RdP_M5ctsg5I9kG1v6cVdA8PaJh35mBB1G8ceHn-0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAzLzMyLzU5LzY1/LzM2MF9GXzMzMjU5/NjUzNV9sQWRMaGY2/S3piVzZQV1hCV2VJ/RlRvdlRpaTFkcmti/VC5qcGc";
-    }
-    return commentJson.dump();
-}
-std::string postComment(std::string rawData) {
-    try {
-        nlohmann::json recieved = nlohmann::json::parse(rawData);
-        CommentData postData;
-        postData.payload = recieved["payload"]; 
-        postData.timestamp = recieved["timestamp"];
-        postData.uid = recieved["uid"];
-        comments.push_back(postData);
-        return "Comment posted!";
-    }
-    catch ( const std::exception& e){
-        std::cerr << "Failed to parse JSON: " << e.what() << std::endl;
-        return std::string("Server failed to parse JSON: ") + e.what();
-    }
-}
+#include "server.h"
 
 void Update() {
     while(true) {
@@ -55,17 +16,10 @@ int main() {
         res.set_content("Ping!", "text/plain");
     });
 
-    svr.Get("/api/load_comments", [](const httplib::Request& req, httplib::Response& res) {
-        res.set_content(getComments(), "text/plain");
-    });
-
-    svr.Post("/api/post_comment", [](const httplib::Request& req, httplib::Response& res) {
-        res.set_content(postComment(req.body), "text/plain");
-    });
-
     initSessionServer(&svr);
     initCryptoServer(&svr);
     initAuthServer(&svr);
+    initCommentsServer(&svr);
 
     std::thread update(Update);
 

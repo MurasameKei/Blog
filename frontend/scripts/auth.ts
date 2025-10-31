@@ -17,6 +17,30 @@ function BytesToBase64(input: Uint8Array): string {
     return btoa(String.fromCharCode.apply(null, input));
 };
 
+async function hash(msg: string): Promise<string> {
+    const data = encoder.encode(msg);
+    
+    const hashKey = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(msg),
+        { name: "PBKDF2" },
+        false,
+        ["deriveBits"]
+    );
+
+    const hashed = await crypto.subtle.deriveBits(
+        {
+            name: "PBKDF2",
+            salt: Base64ToBytes("9b2+WUj1cwXJBFdquodlzLEZqRz0SoU/QMj+aWS1/wow+t2T/z3JCKOuVNs=").buffer as BufferSource,
+            iterations: 131072,
+            hash: "SHA-256"
+        },
+        hashKey,
+        256 
+    );
+    return BytesToBase64(new Uint8Array(hashed));
+}
+
 async function encrypt(msg: string): Promise<{IV: Uint8Array, Encrypted: Uint8Array}> {
     const IV = new Uint8Array(16);
     self.crypto.getRandomValues(IV);
@@ -68,8 +92,10 @@ async function decrypt(encrypted: ArrayBuffer, iv:ArrayBuffer): Promise<string> 
     return decoder.decode(decrypted);
 }
 
+
 const serverPublic = Base64ToBytes("BG8OGVxjV4bxryanNbIPIh7UBs8NA+hPCKoCOP4gg2zRR/WaW1BJ3hoWMyucTS8DpeKUrgoGIG17wVO/4nFvHUGP59Fl7r8PNqE1zzjIonuUojs2xj3OMSKZ0nhE4ng/TOuHxVPB8KB+6tj8YPeXq816HMKhcYXtiMb05tipRJL200cRZSkz+Q2tocjZL0CAxhJNOTWEQ8XibI1opZBRo0A6Vi2xcF73ULMnK3tvvfGXBlV1vqNhzx6uFCalIqt0nJx2LG3QEY4cDBvPaQDPWD67VKATjf+ocvCXwY2BGoJW4kRTN0tHHMQFZjuzPC0SkWDFj+15obkA4wXB6caVDgyEyrBZ+YJj6YYYbYWDsQU4y7Bb8FTNiCZh0lYaUcTccWiFPN1l34TSknTU+X8sEPxQw9qbkD58Rkklzeych9QzzJLjC4O3lg1P91l3xqalDgRD/JnBXT9no4e9kIMmwGhExJBeS+4q4XdSSMG7D20LgdOlpxJFycqVvHs1NeW7cCI+HmYfrwCQlumdmNUyVL34Dz5us4dWkdGSAJ/50WPviN7GKOjeDrccKk2aIxSQNBF3WaZAYBLJvjgF3BV6UVO3vFnbD+FrnPy9Shp1ESUs2qXjdqvktV8Gso5uAktHMBqhYugt7K6gwB76VEVJsuuymfZToZQh+xxXxfTM/1XocAvWdSP4vbDuzy25MLyvvhsFXbQ7YUWYS99E2HRsI3X4Dw/9ywjCmlTqK8vIwVrYbQx2PwPnQv9wjueIaXt179AT6SJVBsEW15C1PUiq1Ge+X0qwDSDKzSjLtRXdgJgwKrRBO95NALm3dpiOLyIgyc3sJO+ltASQOayH1GEQ/y4cuie8dBUZej8dzg2KepnmTEHrGDc6j4OKCntW/eCQQRvEYvP/Qwb3RZAYo2q56t8qb/9+HnI6XlsbJs+eh1hAIr/cmrrx+2Cmd5wf/wXPPXYkvLhQF0z2nFe94Pu9xHNZi4LmMv3AnP7Cb/6VRNmTYmu5R/EDvKIM1/1atblD+QlwZiV/W3iEw9k4vY7sBSODoXe375O6H0ch4tVlXLRdiCFi4Ijqz3z7LqACzXvEg2QUmWmj4ubpPZMyDJpWn8kHrgRnVZzh5DXw+1fQQVMHLN7ay7qKwbLXSkM049ce70NbbtDStO69qMMjEkgj5ArY/2IXsVOpycY4ZzLM/StTXD/J+jEkIgNmpUo4FpZ9f0A5j7jGno8Fmj+/zs23Aq3hSknmAjYnBMI0owZ/x/2xKtxlcnkqWll4l8idIOvIZ1KpsCT3FdSEyRBD5DDaqNQz3c0hTqxo1GuyLJvrZCWy4qPK+9NCCOoMpO3fUQMJDk2qCq9oC6zDQB0stZ/TYGP313mQMq3v8cHNS6D+YBzLyr056z/84dX5Gp7PN5n3k0Mcq5VUCup9qd2m+RKj3pXxQlxSOjULHbiVvfXPzejs/3ANQ0iZiVxU6wA1Dst9DiSiId4bDiBkyKzo94+ExIwjOgsONtXvFypr0wZW2T4zrF+JGuH+ZMwCBUS86CLgBeuzg4cb1STkc1CQsBJ0M5/uyO0ULpnlZjqsxIaQ0LHIJTyIlUaIAJuZj9OszpBv1UXXTYFXcRGZmVd0DczO9G33ysvMz8102uZfL+9XDIdMF19J1fAEysYq0b5Bti9nZAE2ZFDwFJ05PxGSp60JLM2e9pytZs1p2ymrYS4mx54ULytAyuVAl9sMYOotK5LGrEoHS02sGoLeq0P1L3zdrw==");
 
+// TODO: also sign sessionID
 async function encaps(data: object, encrypted: Boolean = true): Promise<string> {
     const privateKey = Base64ToBytes(sessionStorage.getItem("DSAPrivateKey"));
     let dataStr = JSON.stringify(data);
@@ -155,4 +181,4 @@ async function handshake() {
     const decryptedData = await decaps(fetchData);
 }
 
-export {encaps, decaps, Base64ToBytes, BytesToBase64, handshake};
+export {encaps, decaps, Base64ToBytes, BytesToBase64, hash, handshake};

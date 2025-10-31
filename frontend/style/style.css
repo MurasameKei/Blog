@@ -22,7 +22,7 @@
     margin: 0.5em;
 }
 
-#LoginPanel {
+#LoginPanel, #SignUpPanel, #AccountPanel {
     z-index: 1;
     position: absolute;
     background-color: red;
@@ -30,4 +30,7 @@
 }
 .hidden {
     display: none;
+}
+label, button { 
+    display:block;
 }

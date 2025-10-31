@@ -14,6 +14,47 @@
         <link rel="stylesheet" href="/style/style.css">
     </head>
     <body>
+        <nav id="Topbar">
+            <div id="TopbarNavigation">
+                <a href="/index.html" class="TopbarLink">Homepage</a>
+                <a href="/blog/Page1.html" class="TopbarLink">Page 1</a>
+            </div>
+            <input type="image" src="/res/pfp/0.png" alt="your profile photo" id="AccountPicture">
+        </nav>
+        <div id="LoginPanel" class="hidden">
+            <h1>Login</h1>
+
+            <form id="AccountLogInForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" autocomplete="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+                <button type="submit">Login</button>
+            </form>
+            <button id="OpenSignUp">Sign Up</button>
+        </div>
+        <div id="SignUpPanel" class="hidden">
+            <h1>Sign Up</h1>
+
+            <form id="AccountSignUpForm">
+                <label for="createUsername">Username:</label>
+                <input type="text" id="createUsername" name="createUsername" required>
+                <label for="createPassword">Password:</label>
+                <input type="password" id="createPassword" name="createPassword" required>
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+                <button type="submit">Sign Up</button>
+            </form>
+            <button id="CancelSignUp">Cancel</button>
+        </div>
+        <div id="AccountPanel" class="hidden">
+            <h1 id="AccountUsernameDisplay">Username</h1>
+            <p id="AccountPrivilegeDisplay">Basic</p>
+            <button id="LogoutButton">Logout</button>
+        </div>
+
         <h1>Welcome to Page 1!</h1>
         <p>This is a test page.</p>
         <h2>Comments</h2>
@@ -23,7 +64,7 @@
 
         </div>
 
-        <script src="/scripts/comments.js"></script>
-        <script src="/scripts/main.js"></script>
+        <script type="module" src="/scripts/topbar.js"></script>
+        <script type="module" src="/scripts/comments.js"></script>
     </body>
 </html>

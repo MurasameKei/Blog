@@ -1,11 +1,14 @@
-function ParseRecievedComments(data: string): void {
+import {decaps, encaps} from "./auth.ts"
+
+async function LoadComments(): Promise<void> {
+    const commentsFetch = await fetch('http://localhost:8080/api/load_comments');
+    const data = await decaps(await commentsFetch.text());
     const commentsBox = document.getElementById("CommentsBox");
     if(commentsBox == null)
         throw Error("Comment section does not exist");
     commentsBox.textContent = '';
     try {
         const json = JSON.parse(data);
-        console.log(json);
         for (const commentID in json){
             const commentDiv = document.createElement('div');
             commentDiv.setAttribute('class', 'Comment');
@@ -57,49 +60,30 @@ function ParseRecievedComments(data: string): void {
     }
 }
 
-function LoadComments(): void {
-    fetch('http://localhost:8080/api/load_comments')
-        .then(response => response.text()) // Convert the response to text
-        .then(data => {
-                ParseRecievedComments(data)
-            }
-        )
-        .catch(error => {
-                console.error("Error:", error);
-            }
-        );
-}
-
-function PostComment(): void {
+async function PostComment(): Promise<void> {
     console.log("Here!");
     const commentPayloadElement = document.getElementById("PostCommentContents") as HTMLInputElement | null;
     if (commentPayloadElement == null)
         throw Error("There was no comment element");
     const commentPayload = commentPayloadElement.value;
-    const data = {
+    const data = await encaps({
         payload: commentPayload,
-        timestamp: new Date().toISOString(),
-        uid: 0
-    };
-    fetch('http://localhost:8080/api/post_comment', {
+        timestamp: new Date().toISOString()
+    });
+    const postCommentResponse = await fetch('http://localhost:8080/api/post_comment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log("Server responded with:", data);
-            LoadComments();
-        })
-        .catch(error => {
-            console.error("Error:", error);
+            body: data
         });
+    const response = await decaps(await postCommentResponse.text());
+    // Add better user feedback latter
+    console.log(response);
+    LoadComments();
 }
 
 LoadComments();
 const button = document.getElementById("PostButton") as HTMLButtonElement | null;
-console.log(button);
 if(button != null)
     button.addEventListener("click", PostComment);

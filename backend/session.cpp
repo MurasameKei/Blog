@@ -1,3 +1,4 @@
+#include "server.h"
 #include "session.h"
 #include "crypto.h"
 #include "b64.h"
@@ -21,7 +22,6 @@ struct SessionData {
 std::map<string, SessionData> sessions;
 
 string resolve(string sid) {
-    cout << "Resolve request for sid " << sid << endl;
     if(sessions.count(sid) != 0) {
         sessions[sid].totalLife += 32 - sessions[sid].lifeLeft;
         sessions[sid].lifeLeft = 32;
@@ -35,11 +35,10 @@ string resolve(string sid) {
     }
 }
 
-
 int initSessionServer(httplib::Server* svr) {
 
     svr->Post("/api/session/resolve", [](const httplib::Request& req, httplib::Response& res) {
-        res.set_content(encaps(resolve(req.body), "N/A", false), "text/plain");
+        res.set_content(encaps(resolve(req.body), "N/A"), "text/plain");
     });
 
     return 0;
@@ -49,7 +48,6 @@ vector<std::function<void(string)>> expireListeners;
 
 void updateSessions() {
     for(std::map<string, SessionData>::iterator iter = sessions.begin(); iter != sessions.end();) {
-        cout << "Update " << iter->first << endl;
         iter->second.lifeLeft -= 1;
         if(iter->second.lifeLeft <= 0) {
             for(int i = 0; i < expireListeners.size(); i++) {

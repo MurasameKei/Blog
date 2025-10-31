@@ -18,7 +18,6 @@ async function keepAlive() {
         });
         const textData = await response.text();
         const verifiedData = await decaps(textData);
-        console.log(verifiedData);
         if (verifiedData == "New") {
             handshake();
         }

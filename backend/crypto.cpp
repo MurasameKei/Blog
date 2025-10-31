@@ -1,3 +1,4 @@
+#include "server.h"
 #include "crypto.h"
 #include "b64.h"
 #include "session.h"
@@ -90,10 +91,10 @@ string decrypt(string input, vector<uint8_t> IV, vector<uint8_t> key) {
     return data;
 }
 
-string encaps(string sendData, string SID, bool useEncryption) {
+string encaps(string sendData, string SID) {
     string payload = sendData;
     string iv = "N/A";
-    if (useEncryption){
+    if (SID != "N/A"){
         std::pair<string, vector<uint8_t>> encrypted = encrypt(sendData, sessionCrypto[SID].sharedKey);
         payload = encrypted.first;
         iv = VecToB64(encrypted.second);
@@ -198,12 +199,12 @@ int initCryptoServer(httplib::Server* svr) {
 
 
     svr->Post("/api/auth/handshake", [](const httplib::Request& req, httplib::Response& res) {
-        res.set_content(encaps(handshake(req.body), "N/A", false), "text/plain");
+        res.set_content(encaps(handshake(req.body), "N/A"), "text/plain");
     });
 
     svr->Post("/api/auth/complete_handshake", [](const httplib::Request& req, httplib::Response& res) {
         std::pair<json, string> data = decaps(req.body);
-        string send = encaps(completeHandshake(data.first, data.second), data.second, true);
+        string send = encaps(completeHandshake(data.first, data.second), data.second);
         res.set_content(send, "text/plain");
     });
     

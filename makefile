@@ -1,28 +1,12 @@
-# Define the first target 
-all: frontend backend
+default: build
 
-# Frontend compilation
-TS_COMPILE = npx esbuild
-TSFLAGS = --bundle --platform=node --target=ES2020 
-#TSFLAGS = --bundle --platform=node --target=ES2020 --minify
-
-TSDIR = ./frontend/scripts
-TS = $(TSDIR)/homepage.ts $(TSDIR)/comments.ts
-
-JSDIR = ./build/frontend/scripts
-JS = $(TS:$(TSDIR)/%.ts=$(JSDIR)/%.js)
-
-$(JSDIR)/%.js: $(TSDIR)/%.ts
-	$(TS_COMPILE) $(TSFLAGS) $< --outfile=$@
-
-# Backend compilation
 CPPCOMPILE = clang++
 COMPILEFLAGS = -O0
-LINKLIBS = -loqs -lssl -lcrypto
+LINKLIBS = -loqs -lssl -lcrypto -lpqxx -lpq
 LINKFLAGS = $(LINKLIBS)
 
 CPPDIR = ./backend
-SOURCES = $(CPPDIR)/backend.cpp $(CPPDIR)/auth.cpp $(CPPDIR)/b64.cpp $(CPPDIR)/crypto.cpp $(CPPDIR)/session.cpp
+SOURCES = $(CPPDIR)/backend.cpp $(CPPDIR)/auth.cpp $(CPPDIR)/b64.cpp $(CPPDIR)/crypto.cpp $(CPPDIR)/session.cpp $(CPPDIR)/comments.cpp
 
 OBJECTDIR = ./build/part
 OBJECTS = $(SOURCES:$(CPPDIR)/%.cpp=$(OBJECTDIR)/%.o)
@@ -35,16 +19,8 @@ $(OBJECTDIR)%.o: $(CPPDIR)%.cpp
 $(TARGET): $(OBJECTS)
 	$(CPPCOMPILE) $(LINKFLAGS) $(OBJECTS) -o $(TARGET)
 
-# Define CLI rules
-frontend: $(JS)
+build: $(TARGET)
 
-backend: $(TARGET)
-
-clean: clean-frontend clean-backend
-
-clean-frontend:
-	rm -rf $(JSDIR)/*.js
-
-clean-backend:
+clean:
 	rm -rf $(OBJECTDIR)/*.o
 	rm -rf $(TARGET)

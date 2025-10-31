@@ -1,0 +1,11 @@
+# Note that this may not be a comprehensive list.
+
+# Build tools
+make clang typescript esbuild
+
+# C++ Code libraries
+openssl libpqxx nlohmann-json chrono-date
+liboqs # AUR
+
+# Runtime tools
+postgresql nginx
